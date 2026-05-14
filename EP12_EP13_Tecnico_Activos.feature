@@ -3,7 +3,6 @@ Feature: EP-12 & EP-13 - Endpoints Técnicos de Propiedades e Inventario
   Background:
     * url 'http://localhost:8080/api/v1'
     * def randomString = function(len){ var s=''; var chars='abcdefghijklmnopqrstuvwxyz0123456789'; for(var i=0;i<len;i++){s+=chars.charAt(Math.floor(Math.random()*chars.length));} return s; }
-
 # =========================================================================
 # TECHNICAL STORIES - EP-12 (Propiedades)
 # =========================================================================
@@ -19,7 +18,6 @@ Feature: EP-12 & EP-13 - Endpoints Técnicos de Propiedades e Inventario
     When method post
     Then status 200
     * def token = response.token
-    
     Given path 'assets/properties'
     And header Authorization = 'Bearer ' + token
     And request { "address": "Av. Brasil 123", "district": "Jesús María", "city": "Lima", "propertyType": "RESIDENTIAL" }
@@ -38,13 +36,11 @@ Feature: EP-12 & EP-13 - Endpoints Técnicos de Propiedades e Inventario
     When method post
     Then status 200
     * def token = response.token
-    
     Given path 'assets/properties/owner'
     And header Authorization = 'Bearer ' + token
     When method get
     Then status 200
     And match response == '#array'
-
 # =========================================================================
 # TECHNICAL STORIES - EP-13 (Inventario y Servicios)
 # =========================================================================
@@ -60,7 +56,6 @@ Feature: EP-12 & EP-13 - Endpoints Técnicos de Propiedades e Inventario
     When method post
     Then status 200
     * def token = response.token
-    
     Given path 'assets/components'
     And header Authorization = 'Bearer ' + token
     And request { "name": "Relé Térmico", "brand": "ABB", "quantity": 10, "unitCost": 15.00 }
@@ -79,7 +74,6 @@ Feature: EP-12 & EP-13 - Endpoints Técnicos de Propiedades e Inventario
     When method post
     Then status 200
     * def token = response.token
-    
     # Crear componente
     Given path 'assets/components'
     And header Authorization = 'Bearer ' + token
@@ -87,7 +81,6 @@ Feature: EP-12 & EP-13 - Endpoints Técnicos de Propiedades e Inventario
     When method post
     Then status 201
     * def componentId = response.id
-
     # Actualizar stock
     Given path 'assets/components', componentId
     And header Authorization = 'Bearer ' + token
@@ -107,27 +100,25 @@ Feature: EP-12 & EP-13 - Endpoints Técnicos de Propiedades e Inventario
     When method post
     Then status 200
     * def token = response.token
-    
     Given path 'assets/components'
     And header Authorization = 'Bearer ' + token
     And request { "name": "Cinta Aislante", "brand": "3M", "quantity": 10, "unitCost": 5.00 }
     When method post
     Then status 201
     * def componentId = response.id
-
     Given path 'services'
     And header Authorization = 'Bearer ' + token
-    And request 
-    """
-    {
-      "name": "Encintado Preventivo",
-      "description": "Protección de cables",
-      "basePrice": 20.00,
-      "recipe": [
-        { "componentId": #(componentId), "quantityRequired": 1 }
-      ]
-    }
-    """
+    And request
+      """
+      {
+        "name": "Encintado Preventivo",
+        "description": "Protección de cables",
+        "basePrice": 20.00,
+        "recipe": [
+          { "componentId": #(componentId), "quantityRequired": 1 }
+        ]
+      }
+      """
     When method post
     Then status 201
     And match response.recipe[0].componentId == componentId

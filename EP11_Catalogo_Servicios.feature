@@ -3,7 +3,6 @@ Feature: EP-11 - Catálogo de Servicios con Recetas de Componentes
   Background:
     * url 'http://localhost:8080/api/v1'
     * def randomString = function(len){ var s=''; var chars='abcdefghijklmnopqrstuvwxyz0123456789'; for(var i=0;i<len;i++){s+=chars.charAt(Math.floor(Math.random()*chars.length));} return s; }
-
 # =========================================================================
 # USER STORIES - EP-11
 # =========================================================================
@@ -19,7 +18,6 @@ Feature: EP-11 - Catálogo de Servicios con Recetas de Componentes
     When method post
     Then status 200
     * def token = response.token
-    
     # 1. El técnico debe tener componentes en su inventario para usarlos en la receta
     Given path 'assets/components'
     And header Authorization = 'Bearer ' + token
@@ -27,26 +25,25 @@ Feature: EP-11 - Catálogo de Servicios con Recetas de Componentes
     When method post
     Then status 201
     * def componentId = response.id
-
     # 2. Crear servicio con receta (referenciando el componente)
     Given path 'services'
     And header Authorization = 'Bearer ' + token
-    And request 
-    """
-    {
-      "name": "Cambio de Llave General",
-      "description": "Servicio de cambio de interruptor general de tablero",
-      "basePrice": 80.00,
-      "estimatedTime": 1,
-      "category": "MAINTENANCE",
-      "recipe": [
-        {
-          "componentId": #(componentId),
-          "quantityRequired": 1
-        }
-      ]
-    }
-    """
+    And request
+      """
+      {
+        "name": "Cambio de Llave General",
+        "description": "Servicio de cambio de interruptor general de tablero",
+        "basePrice": 80.00,
+        "estimatedTime": 1,
+        "category": "MAINTENANCE",
+        "recipe": [
+          {
+            "componentId": #(componentId),
+            "quantityRequired": 1
+          }
+        ]
+      }
+      """
     When method post
     Then status 201
     And match response.name == "Cambio de Llave General"
@@ -63,7 +60,6 @@ Feature: EP-11 - Catálogo de Servicios con Recetas de Componentes
     When method post
     Then status 200
     * def token = response.token
-    
     # Crear servicio inicial
     Given path 'services'
     And header Authorization = 'Bearer ' + token
@@ -71,24 +67,23 @@ Feature: EP-11 - Catálogo de Servicios con Recetas de Componentes
     When method post
     Then status 201
     * def serviceId = response.id
-
     # Modificar receta del servicio (añadiendo componentes)
     Given path 'services', serviceId
     And header Authorization = 'Bearer ' + token
-    And request 
-    """
-    {
-      "name": "Revisión Básica Plus",
-      "description": "Chequeo visual y limpieza de contactos",
-      "basePrice": 50.00,
-      "recipe": [
-        {
-          "componentName": "Limpia Contactos",
-          "quantityRequired": 0.1
-        }
-      ]
-    }
-    """
+    And request
+      """
+      {
+        "name": "Revisión Básica Plus",
+        "description": "Chequeo visual y limpieza de contactos",
+        "basePrice": 50.00,
+        "recipe": [
+          {
+            "componentName": "Limpia Contactos",
+            "quantityRequired": 0.1
+          }
+        ]
+      }
+      """
     When method put
     Then status 200
     And match response.name == "Revisión Básica Plus"
@@ -104,7 +99,6 @@ Feature: EP-11 - Catálogo de Servicios con Recetas de Componentes
     When method post
     Then status 200
     * def token = response.token
-    
     # Crear servicio
     Given path 'services'
     And header Authorization = 'Bearer ' + token
@@ -112,7 +106,6 @@ Feature: EP-11 - Catálogo de Servicios con Recetas de Componentes
     When method post
     Then status 201
     * def serviceId = response.id
-
     # Eliminar servicio
     Given path 'services', serviceId
     And header Authorization = 'Bearer ' + token

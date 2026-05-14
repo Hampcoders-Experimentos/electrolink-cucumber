@@ -3,7 +3,6 @@ Feature: EP-14 & EP-15 - Flujo de Solicitud, Asignación y Evaluación
   Background:
     * url 'http://localhost:8080/api/v1'
     * def randomString = function(len){ var s=''; var chars='abcdefghijklmnopqrstuvwxyz0123456789'; for(var i=0;i<len;i++){s+=chars.charAt(Math.floor(Math.random()*chars.length));} return s; }
-
 # =========================================================================
 # TECHNICAL STORIES - EP-14 (Solicitud y Asignación)
 # =========================================================================
@@ -28,7 +27,6 @@ Feature: EP-14 & EP-15 - Flujo de Solicitud, Asignación y Evaluación
     When method post
     Then status 200
     * def token = response.token
-    
     # Simular que ya tiene 2 solicitudes este mes (limite de plan gratuito)
     # Este escenario asume que hay un check previo o que el backend valida esto al intentar crear
     Given path 'requests/check-limit'
@@ -49,25 +47,24 @@ Feature: EP-14 & EP-15 - Flujo de Solicitud, Asignación y Evaluación
     When method post
     Then status 200
     * def token = response.token
-    
     Given path 'requests'
     And header Authorization = 'Bearer ' + token
-    And request 
-    """
-    {
-      "clientId": "user-uuid-001",
-      "propertyId": "prop-uuid-001",
-      "serviceId": 1,
-      "problemDescription": "Cortocircuito en sala",
-      "scheduledDate": "2026-05-20",
-      "isPriority": false,
-      "bill": {
-        "billingPeriod": "Mayo 2026",
-        "energyConsumed": 250.5,
-        "amountPaid": 120.00
+    And request
+      """
+      {
+        "clientId": "user-uuid-001",
+        "propertyId": "prop-uuid-001",
+        "serviceId": 1,
+        "problemDescription": "Cortocircuito en sala",
+        "scheduledDate": "2026-05-20",
+        "isPriority": false,
+        "bill": {
+          "billingPeriod": "Mayo 2026",
+          "energyConsumed": 250.5,
+          "amountPaid": 120.00
+        }
       }
-    }
-    """
+      """
     When method post
     Then status 201
     And match response.id != '#null'
@@ -77,7 +74,6 @@ Feature: EP-14 & EP-15 - Flujo de Solicitud, Asignación y Evaluación
     When method post
     Then status 200
     * print 'Proceso de asignación automática ejecutado.'
-
 # =========================================================================
 # TECHNICAL STORIES - EP-15 (Evaluación)
 # =========================================================================
@@ -93,19 +89,18 @@ Feature: EP-14 & EP-15 - Flujo de Solicitud, Asignación y Evaluación
     When method post
     Then status 200
     * def token = response.token
-    
     Given path 'ratings'
     And header Authorization = 'Bearer ' + token
-    And request 
-    """
-    {
-      "requestId": 1,
-      "score": 5,
-      "comment": "Excelente atención técnica",
-      "raterId": "user-uuid-001",
-      "technicianId": 1
-    }
-    """
+    And request
+      """
+      {
+        "requestId": 1,
+        "score": 5,
+        "comment": "Excelente atención técnica",
+        "raterId": "user-uuid-001",
+        "technicianId": 1
+      }
+      """
     When method post
     Then status 201
     And match response.score == 5

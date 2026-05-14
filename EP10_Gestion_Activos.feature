@@ -3,11 +3,9 @@ Feature: EP-10 - Gestión de Activos (Componentes y Propiedades)
   Background:
     * url 'http://localhost:8080/api/v1'
     * def randomString = function(len){ var s=''; var chars='abcdefghijklmnopqrstuvwxyz0123456789'; for(var i=0;i<len;i++){s+=chars.charAt(Math.floor(Math.random()*chars.length));} return s; }
-
 # =========================================================================
 # USER STORIES - EP-10
 # =========================================================================
-
 # -------------------------------------------------------------------------
 # US-31, US-32, US-33, US-37, US-38, US-39: Gestión de Componentes (Técnico)
 # -------------------------------------------------------------------------
@@ -23,20 +21,19 @@ Feature: EP-10 - Gestión de Activos (Componentes y Propiedades)
     When method post
     Then status 200
     * def token = response.token
-    
     Given path 'assets/components'
     And header Authorization = 'Bearer ' + token
-    And request 
-    """
-    {
-      "name": "Interruptor Termomagnético 20A",
-      "brand": "Schneider",
-      "model": "Acti9",
-      "quantity": 10,
-      "unitCost": 25.50,
-      "minStockThreshold": 2
-    }
-    """
+    And request
+      """
+      {
+        "name": "Interruptor Termomagnético 20A",
+        "brand": "Schneider",
+        "model": "Acti9",
+        "quantity": 10,
+        "unitCost": 25.50,
+        "minStockThreshold": 2
+      }
+      """
     When method post
     Then status 201
     And match response.name == "Interruptor Termomagnético 20A"
@@ -54,7 +51,6 @@ Feature: EP-10 - Gestión de Activos (Componentes y Propiedades)
     When method post
     Then status 200
     * def token = response.token
-    
     # Crear componente inicial
     Given path 'assets/components'
     And header Authorization = 'Bearer ' + token
@@ -62,7 +58,6 @@ Feature: EP-10 - Gestión de Activos (Componentes y Propiedades)
     When method post
     Then status 201
     * def componentId = response.id
-
     # Editar componente
     Given path 'assets/components', componentId
     And header Authorization = 'Bearer ' + token
@@ -83,7 +78,6 @@ Feature: EP-10 - Gestión de Activos (Componentes y Propiedades)
     When method post
     Then status 200
     * def token = response.token
-    
     # Crear componente
     Given path 'assets/components'
     And header Authorization = 'Bearer ' + token
@@ -91,7 +85,6 @@ Feature: EP-10 - Gestión de Activos (Componentes y Propiedades)
     When method post
     Then status 201
     * def componentId = response.id
-
     # Eliminar componente
     Given path 'assets/components', componentId
     And header Authorization = 'Bearer ' + token
@@ -109,7 +102,6 @@ Feature: EP-10 - Gestión de Activos (Componentes y Propiedades)
     When method post
     Then status 200
     * def token = response.token
-    
     # Crear componente con umbral
     Given path 'assets/components'
     And header Authorization = 'Bearer ' + token
@@ -117,7 +109,6 @@ Feature: EP-10 - Gestión de Activos (Componentes y Propiedades)
     When method post
     Then status 201
     And match response.minStockThreshold == 3
-
 # -------------------------------------------------------------------------
 # US-34, US-35, US-36: Gestión de Propiedades (Propietario)
 # -------------------------------------------------------------------------
@@ -133,20 +124,19 @@ Feature: EP-10 - Gestión de Activos (Componentes y Propiedades)
     When method post
     Then status 200
     * def token = response.token
-    
     Given path 'assets/properties'
     And header Authorization = 'Bearer ' + token
-    And request 
-    """
-    {
-      "address": "Calle Las Begonias 123",
-      "district": "San Isidro",
-      "city": "Lima",
-      "propertyType": "RESIDENTIAL",
-      "latitude": -12.0945,
-      "longitude": -77.0321
-    }
-    """
+    And request
+      """
+      {
+        "address": "Calle Las Begonias 123",
+        "district": "San Isidro",
+        "city": "Lima",
+        "propertyType": "RESIDENTIAL",
+        "latitude": -12.0945,
+        "longitude": -77.0321
+      }
+      """
     When method post
     Then status 201
     And match response.address == "Calle Las Begonias 123"
@@ -163,7 +153,6 @@ Feature: EP-10 - Gestión de Activos (Componentes y Propiedades)
     When method post
     Then status 200
     * def token = response.token
-    
     # Crear propiedad
     Given path 'assets/properties'
     And header Authorization = 'Bearer ' + token
@@ -171,7 +160,6 @@ Feature: EP-10 - Gestión de Activos (Componentes y Propiedades)
     When method post
     Then status 201
     * def propertyId = response.id
-
     # Editar propiedad
     Given path 'assets/properties', propertyId
     And header Authorization = 'Bearer ' + token
@@ -191,7 +179,6 @@ Feature: EP-10 - Gestión de Activos (Componentes y Propiedades)
     When method post
     Then status 200
     * def token = response.token
-    
     # Crear propiedad
     Given path 'assets/properties'
     And header Authorization = 'Bearer ' + token
@@ -199,7 +186,6 @@ Feature: EP-10 - Gestión de Activos (Componentes y Propiedades)
     When method post
     Then status 201
     * def propertyId = response.id
-
     # Eliminar propiedad
     Given path 'assets/properties', propertyId
     And header Authorization = 'Bearer ' + token
